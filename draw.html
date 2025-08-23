@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Draw and Predict</title>
+  <style>
+    .parent {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: 1fr;
+      grid-column-gap: 0px;
+      grid-row-gap: 0px;
+      width: 400px;
+      height: 200px;
+      margin-bottom: 10px;
+    }
+
+    #drawCanvas {
+      border: 1px solid #000;
+      width: 200px;
+      height: 200px;
+    }
+
+    #result {
+      width: 200px;
+      height: 200px;
+      border: 1px solid #000;   /* görünür çerçeve */
+      background: #fff;         /* beyaz zemin */
+      color: #000;
+      text-align: center;
+      font-size: 80pt;
+      line-height: 200px;
+      vertical-align: middle;
+      user-select: none;
+    }
+
+    .actions {
+      margin-top: 6px;
+    }
+    .actions button {
+      margin-right: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="parent">
+    <canvas id="drawCanvas" width="200" height="200"></canvas>
+    <div id="result">?</div>
+  </div>
+
+  <div class="actions">
+    <button id="btnPredict">Predict</button>
+    <button id="btnReset">Reset</button>
+  </div>
+
+  <script>
+    // Çizim ayarları
+    let canvas, ctx;
+    let drawing = false;
+    let prevX = 0, prevY = 0, currX = 0, currY = 0;
+    const penColor = "white";
+    const penWidth = 12;
+    const bg = "black";
+    const API_URL = "http://127.0.0.1:5000/predict";
+
+    // Reset
+    document.getElementById("btnReset").onclick = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      document.getElementById("result").innerText = "?";
+    };
+
+    // Predict
+    document.getElementById("btnPredict").onclick = async () => {
+      try {
+        document.getElementById("result").innerText = "…"; // beklerken
+        const dataURL = canvas.toDataURL("image/png");
+        const b64 = dataURL.replace(/^data:image\/png;base64,/, "");
+
+        const resp = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ image_base64: b64 })
+        });
+
+        const json = await resp.json();
+        if (resp.ok) {
+          document.getElementById("result").innerText = String(json.prediction);
+        } else {
+          document.getElementById("result").innerText = "X";
+          alert("Hata: " + (json.error || resp.statusText));
+        }
+      } catch (err) {
+        document.getElementById("result").innerText = "X";
+        alert("İstek gönderilemedi: " + err);
+      }
+    };
+
+    // Canvas init
+    function init() {
+      canvas = document.getElementById("drawCanvas");
+      // Yükseklik zaten 200; ebeveyn yüksekliği değişirse senkron olsun:
+      canvas.setAttribute("height", canvas.parentNode.offsetHeight);
+
+      ctx = canvas.getContext("2d");
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.lineCap = "round";
+
+      canvas.addEventListener("mousedown", (e) => {
+        drawing = true;
+        const r = canvas.getBoundingClientRect();
+        currX = e.clientX - r.left;
+        currY = e.clientY - r.top;
+        prevX = currX; prevY = currY;
+
+        // Tek tık noktası
+        ctx.beginPath();
+        ctx.fillStyle = penColor;
+        ctx.fillRect(currX, currY, 2, 2);
+        ctx.closePath();
+      });
+
+      canvas.addEventListener("mouseup",   () => { drawing = false; });
+      canvas.addEventListener("mouseout",  () => { drawing = false; });
+
+      canvas.addEventListener("mousemove", (e) => {
+        if (!drawing) return;
+        prevX = currX; prevY = currY;
+        currX = e.offsetX; currY = e.offsetY;
+        drawStroke();
+      });
+    }
+
+    function drawStroke() {
+      ctx.beginPath();
+      ctx.moveTo(prevX, prevY);
+      ctx.lineTo(currX, currY);
+      ctx.strokeStyle = penColor;
+      ctx.lineWidth = penWidth;
+      ctx.stroke();
+      ctx.closePath();
+    }
+
+    init();
+  </script>
+</body>
+</html>
