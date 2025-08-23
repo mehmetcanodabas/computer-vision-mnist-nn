@@ -12,6 +12,7 @@
 !*.html
 !*.htm
 !docs/
+!docs/**
 
 # Keep the .gitignore itself
 !.gitignore
