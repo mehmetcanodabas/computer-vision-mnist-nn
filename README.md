@@ -12,7 +12,7 @@ This repository only contains the architecture summary, methodology, and overall
 
 ### Result snapshots 
 
-[Training curves](docs/results/Reflectivity.jpg): Training/validation loss and accuracy across epochs (MNIST neural network).
+[Training curves](docs/results/training-curves.jpg): Training/validation loss and accuracy across epochs (MNIST neural network).
 
-[Draw and predict demo](docs/results/Reflectivity-visualization.jpg): Browser canvas sending a hand-drawn digit to the model and displaying the predicted class.
+[Draw and predict demo](docs/results/webapi-draw-predict_demo.jpg): Browser canvas sending a hand-drawn digit to the model and displaying the predicted class.
 
