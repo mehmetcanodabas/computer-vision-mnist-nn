@@ -1,4 +1,4 @@
-# Project: Neural Network Based Handwritten Digit Classifier
+# Project: Implementation of Neural Network Based Handwritten Digit Classifier
 # Chair of Digital Signal Processing and Circuit Technology
 # Computer Vision Laboratory
 # Note: Source code is not shared due to institutional restrictions.
