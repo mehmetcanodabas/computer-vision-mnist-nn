@@ -6,7 +6,7 @@ This project was carried out at the Computer Vision Laboratory, Chair of Digital
 
 Since the source code belongs to the institution, it cannot be shared publicly.  
 
-This repository only contains the architecture summary, methodology, and overall design documentation and a local inference demo.
+This repository only contains the architecture summary, methodology, overall design documentation, and a local inference demo.
 
 **⚠️[Project summary (Pdf)](docs/project-summary.pdf): Detailed approach, dataset information, and results are provided in this PDF.**
 
