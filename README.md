@@ -16,4 +16,4 @@ This repository only contains the architecture summary, methodology, overall des
 
 [Draw and predict demo](docs/results/Webapi-draw-predict_demo.png): Browser canvas sending a hand-drawn digit to the model and displaying the predicted class.
 
-**Keywords:** Computer Vision, Deep Learning, Artificial Neural Networks (ANN), Multilayer Perceptron (MLP), Handwritten Digit Recognition, MNIST, Image Classification, TensorFlow, Keras, Model Training, Model Evaluation, HTML, Python.
+**Keywords:** Python, Artificial Neural Networks (ANN), Computer Vision, Deep Learning, Handwritten Digit Recognition, HTML, Image Classification, Keras, MNIST, Model Evaluation, Model Training, Multilayer Perceptron (MLP), TensorFlow.
